@@ -41,6 +41,7 @@ Route::get("/contact1", function () {
         "paises" => $paises
     ]);
 });
+
 //Rutas que usan el layout
 Route::get("/home", function (){
     return view("home");
