@@ -27,3 +27,24 @@ Route::get("/vista/{num}", function ($num){
         'num' => $num
     ]);
 });
+
+//Rutas con vistas asociadas
+Route::get("/vistas/vista1", function (){
+    return view("test.vista1");
+})->name("vista1");
+Route::get("/vistas/vista2", function (){
+    return redirect()->route("vista1");
+})->name("vista2.blade.php");
+Route::get("/contact1", function () {
+    $paises = ["Mexico", "Argentina", "Alemania", "Canada"];
+    return view("/test/contact", [
+        "paises" => $paises
+    ]);
+});
+//Rutas que usan el layout
+Route::get("/home", function (){
+    return view("home");
+});
+
+//Rutas para el controlador prueba de tipo recurso
+Route::resource("pruebaController", \App\Http\Controllers\pruebaController::class);
