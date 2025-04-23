@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Models\Categoria;
 use App\Models\Post;
 use Illuminate\Http\Request;
 
@@ -13,7 +14,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        //Creacion de un post
+//        Creacion de un post
 //        $postCreado = Post::create([
 //            "titulo" => "Post Prueba",
 //            "slug" => "Post Prueba",
@@ -37,19 +38,22 @@ class PostController extends Controller
 //        ]);
 
         //Eliminiacion de un post
-        $postFindById = Post::find(2);
-        if (!$postFindById){
-            return json_encode([
-                "code" => 500,
-                "msg" => "Post no encontrado"
-            ]);
-        }
+//        $postFindById = Post::find(5);
+//        if (!$postFindById){
+//            return response()->json([
+//                "code" => 500,
+//                "msg" => "Post no encontrado con ese ID"
+//            ], 404);
+//        }
+//        $postFindById->delete();
 
-        $postFindById->delete();
-        return json_encode([
-            "status" => "200",
-            "msg" => "Post creado eliminado correctamente"
-        ]);
+        $postsFindById = Post::find(3);
+        return response()->json([
+            "code" => 200,
+            "msg" => "Post Encontrado",
+            "nombrePost" => $postsFindById->titulo,
+            "categoria post" => $postsFindById->categoria->nombre
+        ], 200);
     }
 
     /**
