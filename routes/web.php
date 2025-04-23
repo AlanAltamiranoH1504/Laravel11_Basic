@@ -49,3 +49,6 @@ Route::get("/home", function (){
 
 //Rutas para el controlador prueba de tipo recurso
 Route::resource("pruebaController", \App\Http\Controllers\pruebaController::class);
+
+//Ruta para PostController (tipo resource)
+Route::resource("/posts", \App\Http\Controllers\Dashboard\PostController::class);
