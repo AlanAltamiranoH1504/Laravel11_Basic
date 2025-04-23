@@ -49,6 +49,7 @@
                     <div class="modal-body">
                         <div class="w-100 mt-2" id="alertas"></div>
                         <form class="d-flex flex-column gap-3" enctype="multipart/form-data">
+                            <input type="hidden" value="{{csrf_token()}}">
                             <div>
                                 <label for="titulo" class="form-label fw-semibold">Titulo</label>
                                 <input type="text" class="form-control" id="titulo" placeholder="Titulo del producto">

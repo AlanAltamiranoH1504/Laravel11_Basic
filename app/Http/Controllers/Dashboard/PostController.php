@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\requestPostCreate;
 use App\Models\Categoria;
 use App\Models\Post;
 use Illuminate\Http\Request;
@@ -34,22 +35,9 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(RequestPostCreate $request)
     {
-        $postCreado = Post::create([
-            "titulo" => $request['titulo'],
-            "slug" => $request['slug'],
-            "descripcion" => $request['descripcion'],
-            "contenido" => $request['contenido'],
-            "imagen" => $request['imagen'],
-            "publicado" => $request['publicado'],
-            "categoria_id" => $request['categoria_id']
-        ]);
 
-        return json_encode([
-            "status" => "200",
-            "msg" => "Post creado de manera corrcta"
-        ]);
     }
 
     /**

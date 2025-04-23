@@ -2,6 +2,11 @@ document.addEventListener("DOMContentLoaded", () => {
     listarPostsPeticion();
     listarCategoriasPeticion();
 
+    //Selectores
+    const btnSendForm = document.querySelector("#sendForm");
+    //Eventos
+    btnSendForm.addEventListener("click", guardarPostPeticion);
+
     //Funciones
     function listarPostsPeticion() {
         fetch("/listPosts", {
@@ -54,5 +59,23 @@ document.addEventListener("DOMContentLoaded", () => {
            optionCategoria.innerHTML =  categoria.nombre;
            categoriasSelect.appendChild(optionCategoria);
         });
+    }
+
+    function guardarPostPeticion(e) {
+        e.preventDefault();
+        const inputTitulo = document.querySelector("#titulo").value;
+        const inputSlug = document.querySelector("#slug").value;
+        const inputDescripcion = document.querySelector("#descripcion").value;
+        const selectPublicados = document.querySelector("#publicados").value;
+        const selectCategorias = document.querySelector("#categoriasSelect").value;
+
+        const postBody = {
+            titulo: inputTitulo,
+            slug: inputSlug,
+            descripcion: inputDescripcion,
+            publicado: selectPublicados,
+            categoria: selectCategorias
+        };
+
     }
 });
