@@ -14,46 +14,13 @@ class PostController extends Controller
      */
     public function index()
     {
-//        Creacion de un post
-//        $postCreado = Post::create([
-//            "titulo" => "Post Prueba",
-//            "slug" => "Post Prueba",
-//            "descripcion" => "Post Prueba",
-//            "contenido" => "Post Prueba",
-//            "imagen" => "Post Prueba",
-//            "publicado" => "no",
-//            "categoria_id" => 1
-//        ]);
+        return view(view: "dashboard.posts.index");
+    }
 
-        //Actualizacion de un post
-//        $postFindById = Post::find(1);
-//        $postFindById->update([
-//            "titulo" => "Post Prueba actualizado",
-//            "slug" => "Post Prueba actualizado",
-//            "descripcion" => "Post Prueba actualizado",
-//            "contenido" => "Post Prueba actualizado",
-//            "imagen" => "Post Prueba actualizado",
-//            "publicado" => "si",
-//            "categoria_id" => 1
-//        ]);
-
-        //Eliminiacion de un post
-//        $postFindById = Post::find(5);
-//        if (!$postFindById){
-//            return response()->json([
-//                "code" => 500,
-//                "msg" => "Post no encontrado con ese ID"
-//            ], 404);
-//        }
-//        $postFindById->delete();
-
-        $postsFindById = Post::find(3);
-        return response()->json([
-            "code" => 200,
-            "msg" => "Post Encontrado",
-            "nombrePost" => $postsFindById->titulo,
-            "categoria post" => $postsFindById->categoria->nombre
-        ], 200);
+    public function list()
+    {
+        $posts = Post::with("categoria")->get();
+        return response()->json($posts,200);
     }
 
     /**

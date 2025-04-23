@@ -52,3 +52,7 @@ Route::resource("pruebaController", \App\Http\Controllers\pruebaController::clas
 
 //Ruta para PostController (tipo resource)
 Route::resource("/posts", \App\Http\Controllers\Dashboard\PostController::class);
+Route::get("/listPosts", [\App\Http\Controllers\Dashboard\PostController::class, "list"]);
+
+//Rutas para CategoriaController (tipo resource)
+Route::get("/listCategorias", [\App\Http\Controllers\Dashboard\CategoriaController::class, "list"]);
