@@ -37,8 +37,26 @@ class PostController extends Controller
      */
     public function store(RequestPostCreate $request)
     {
-
+        try {
+            $postSave = Post::create($request->validated());
+            return response()->json($postSave, 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Error al guardar el post',
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
+
+//    public function store(RequestPostCreate $request)
+//    {
+//        try {
+//            $postSave = Post::create($request->validated());
+//            return response()->json($postSave, 201);
+//        } catch (\Exception $e) {
+//            return response()->json(['error' => 'Error al guardar el post', 'message' => $e->getMessage()], 500);
+//        }
+//    }
 
     /**
      * Display the specified resource.

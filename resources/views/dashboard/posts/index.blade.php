@@ -38,7 +38,6 @@
         </div>
 
         {{--Modal crear post--}}
-        <!-- Modal Agregar Producto -->
         <div class="modal fade" id="nuevoPost" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content rounded-4 shadow">
@@ -49,7 +48,7 @@
                     <div class="modal-body">
                         <div class="w-100 mt-2" id="alertas"></div>
                         <form class="d-flex flex-column gap-3" enctype="multipart/form-data">
-                            <input type="hidden" value="{{csrf_token()}}">
+                            <input type="hidden" id="_token" value="{{csrf_token()}}">
                             <div>
                                 <label for="titulo" class="form-label fw-semibold">Titulo</label>
                                 <input type="text" class="form-control" id="titulo" placeholder="Titulo del producto">
@@ -61,6 +60,10 @@
                             <div>
                                 <label for="descripcion" class="form-label fw-semibold">Descripción</label>
                                 <input type="text" class="form-control" id="descripcion" placeholder="Descripción del post">
+                            </div>
+                            <div>
+                                <label for="contenido" class="form-label fw-semibold">Contenudo</label>
+                                <input type="text" class="form-control" id="contenido" placeholder="Contenido del post">
                             </div>
                             <div>
                                 <label for="imagen" class="form-label fw-semibold">Imagen</label>
