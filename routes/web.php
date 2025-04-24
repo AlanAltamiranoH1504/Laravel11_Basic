@@ -56,3 +56,7 @@ Route::get("/listPosts", [\App\Http\Controllers\Dashboard\PostController::class,
 
 //Rutas para CategoriaController (tipo resource)
 Route::get("/listCategorias", [\App\Http\Controllers\Dashboard\CategoriaController::class, "list"]);
+
+//Ruta para prueba de ajax
+Route::get("/pruebaAjax", [\App\Http\Controllers\AjaxController::class, "index"]);
+Route::post("/pruebaAjax", [\App\Http\Controllers\AjaxController::class, "store"]);
