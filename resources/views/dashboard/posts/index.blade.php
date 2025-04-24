@@ -110,9 +110,10 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="w-100 mt-2" id="alertasCreacion"></div>
+                        <div class="w-100 mt-2" id="alertasActualizacion"></div>
                         <form class="d-flex flex-column gap-3" enctype="multipart/form-data">
-                            <input type="hidden" id="_token" value="{{csrf_token()}}">
+                            <input type="hidden" id="_tokenUpdate" value="{{csrf_token()}}">
+                            <input type="hidden" id="idPost">
                             <div>
                                 <label for="titulo" class="form-label fw-semibold">Titulo</label>
                                 <input type="text" class="form-control" id="tituloEdicion" placeholder="Titulo del producto">
@@ -150,7 +151,7 @@
                         </form>
                     </div>
                     <div class="modal-footer d-flex justify-content-between">
-                        <button type="button" id="sendForm" class="btn btn-success fw-semibold">Actualizar</button>
+                        <button type="button" id="sendFormUpdate" class="btn btn-success fw-semibold">Actualizar</button>
                         <button type="button" class="btn btn-outline-danger fw-semibold" data-bs-dismiss="modal">Cerrar</button>
                     </div>
                 </div>

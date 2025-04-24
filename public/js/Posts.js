@@ -4,9 +4,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //Selectores
     const btnSendForm = document.querySelector("#sendForm");
+    const btnsendFormUpdate = document.querySelector("#sendFormUpdate");
 
     //Eventos
     btnSendForm.addEventListener("click", guardarPostPeticion);
+    btnsendFormUpdate.addEventListener("click", actualizarPostPeticion);
 
     //Funciones
     function listarPostsPeticion() {
@@ -79,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
             categorias.forEach((categoria) => {
                 const optionCategoria = document.createElement("option");
                 optionCategoria.setAttribute("value", categoria.id);
-                optionCategoria.innerHTML =  categoria.nombre;
+                optionCategoria.innerHTML = categoria.nombre;
                 categoriasSelect.appendChild(optionCategoria);
             });
         } else {
@@ -88,7 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
             categorias.forEach((categoria) => {
                 const optionCategoria = document.createElement("option");
                 optionCategoria.setAttribute("value", categoria.id);
-                optionCategoria.innerHTML =  categoria.nombre;
+                optionCategoria.innerHTML = categoria.nombre;
                 categoriasSelectEdicion.appendChild(optionCategoria);
             });
         }
@@ -131,7 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 alertas("create", "success", "Post creado correctamente!", null);
                 listarPostsPeticion();
                 listarCategoriasPeticion();
-            } else{
+            } else {
                 alertas("create", "error", "Error en creacion de post", data.errors);
             }
         }).catch((error) => {
@@ -140,7 +142,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    function eliminiarPostPeticion(id){
+    function eliminiarPostPeticion(id) {
         if (confirm("¿Estás seguro que quieres eliminar el post?")) {
             const bodyPost = {
                 id
@@ -185,7 +187,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }).then((data) => {
             if (!data.post) {
                 console.log("Muestra alertas de post no encontrado");
-            }else{
+            } else {
                 listarCategoriasPeticion("edicion");
                 llenarFormularioActualizacion(data.post);
             }
@@ -195,15 +197,59 @@ document.addEventListener("DOMContentLoaded", () => {
         })
     }
 
-    function llenarFormularioActualizacion(post){
+    function llenarFormularioActualizacion(post) {
         const modalEdicion = new bootstrap.Modal(document.querySelector("#editarPost"));
         modalEdicion.show();
 
+        document.querySelector("#idPost").value = post.id;
         document.querySelector("#tituloEdicion").value = post.titulo;
         document.querySelector("#slugEdicion").value = post.slug;
         document.querySelector("#descripcionEdicion").value = post.descripcion;
         document.querySelector("#contenidoEdicion").value = post.contenido;
         document.querySelector("#publicadosEdicion").value = post.publicado;
+    }
+
+    function actualizarPostPeticion() {
+        const inputId = document.querySelector("#idPost").value;
+        const csrfToken = document.querySelector("#_tokenUpdate").value;
+        const inputTitulo = document.querySelector("#tituloEdicion").value;
+        const inputSlug = document.querySelector("#slugEdicion").value;
+        const inputDescripcion = document.querySelector("#descripcionEdicion").value;
+        const inputContenido = document.querySelector("#contenidoEdicion").value;
+        const inputPublicado = document.querySelector("#publicadosEdicion").value;
+        const inputCategoria = document.querySelector("#categoriasSelectEdicion").value;
+
+        const boydPostUpdate = {
+            id: inputId,
+            titulo: inputTitulo,
+            slug: inputSlug,
+            descripcion: inputDescripcion,
+            contenido: inputContenido,
+            publicado: inputPublicado,
+            categoria_id: inputCategoria,
+        };
+
+        fetch(`/posts/update`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "X-CSRF-TOKEN": csrfToken
+            },
+            body: JSON.stringify(boydPostUpdate)
+        }).then((response) => {
+            return response.json();
+        }).then((data) => {
+            if (data.message) {
+                alertas("update", "success", data.message, null);
+                listarPostsPeticion();
+            } else{
+                alertas("update", "error", data.message, null);
+            }
+        }).catch((error) => {
+            console.log("Error en peticion");
+            console.log(error.message);
+        });
     }
 
     function alertas(lugar, tipo, msg, errores) {
@@ -249,6 +295,26 @@ document.addEventListener("DOMContentLoaded", () => {
                 divAlertasEliminacion.appendChild(divSucces);
                 setTimeout(() => {
                     divAlertasEliminacion.innerHTML = "";
+                }, 3500);
+            }
+        } else if (lugar === "update") {
+            const divAlertasActualizacion = document.querySelector("#alertasActualizacion");
+            divAlertasActualizacion.innerHTML = "";
+            if (tipo === "error") {
+                const divError = document.createElement("div");
+                divError.classList.add("bg-danger", "mb-3", "text-white", "fw-semibold", "text-center", "rounded", "px-3", "py-1", "fs-5");
+                divError.textContent = msg;
+                divAlertasActualizacion.appendChild(divError);
+                setTimeout(() => {
+                    divAlertasActualizacion.innerHTML = "";
+                }, 3500);
+            } else {
+                const divSucces = document.createElement("div");
+                divSucces.classList.add("bg-success", "mb-3", "text-white", "fw-semibold", "text-center", "rounded", "px-3", "py-1", "fs-5");
+                divSucces.textContent = msg;
+                divAlertasActualizacion.appendChild(divSucces);
+                setTimeout(() => {
+                    divAlertasActualizacion.innerHTML = "";
                 }, 3500);
             }
         }
