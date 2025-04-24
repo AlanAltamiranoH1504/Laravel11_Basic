@@ -51,21 +51,31 @@ class PostController extends Controller
         }
     }
 
-
     /**
      * Display the specified resource.
      */
     public function show(Post $post)
     {
-        //
+        $postWithCategoria = Post::with("categoria")->find($post['id']);
+        try {
+            return response()->json([
+                "post" => $postWithCategoria
+            ], 200);
+        }catch (\Exception $e){
+            return response()->json([
+               "error" => $e->getMessage(),
+               "file" => $e->getFile(),
+               "line" => $e->getLine()
+            ]);
+        }
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Post $post)
+    public function edit(Request $request)
     {
-        //
+
     }
 
     /**

@@ -58,11 +58,13 @@
                             </div>
                             <div>
                                 <label for="slug" class="form-label fw-semibold">Slug</label>
-                                <input type="text" class="form-control" id="slug" name="slug" placeholder="Slug del post">
+                                <input type="text" class="form-control" id="slug" name="slug"
+                                       placeholder="Slug del post">
                             </div>
                             <div>
                                 <label for="descripcion" class="form-label fw-semibold">Descripción</label>
-                                <input type="text" class="form-control" id="descripcion" placeholder="Descripción del post">
+                                <input type="text" class="form-control" id="descripcion"
+                                       placeholder="Descripción del post">
                             </div>
                             <div>
                                 <label for="contenido" class="form-label fw-semibold">Contenudo</label>
@@ -70,7 +72,8 @@
                             </div>
                             <div>
                                 <label for="imagen" class="form-label fw-semibold">Imagen</label>
-                                <input type="file" name="imagen" class="form-control" id="imagen" placeholder="Imagen del post">
+                                <input type="file" name="imagen" class="form-control" id="imagen"
+                                       placeholder="Imagen del post">
                             </div>
                             <div>
                                 <label for="publicados" class="form-label fw-semibold">¿Publicado?</label>
@@ -90,6 +93,64 @@
                     </div>
                     <div class="modal-footer d-flex justify-content-between">
                         <button type="button" id="sendForm" class="btn btn-success fw-semibold">Agregar</button>
+                        <button type="button" class="btn btn-outline-danger fw-semibold" data-bs-dismiss="modal">
+                            Cerrar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{--Modal edicion--}}
+        <div class="modal fade" id="editarPost" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content rounded-4 shadow">
+                    <div class="modal-header">
+                        <h4 class="modal-title fw-bold text-uppercase text-center">Editar Post</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="w-100 mt-2" id="alertasCreacion"></div>
+                        <form class="d-flex flex-column gap-3" enctype="multipart/form-data">
+                            <input type="hidden" id="_token" value="{{csrf_token()}}">
+                            <div>
+                                <label for="titulo" class="form-label fw-semibold">Titulo</label>
+                                <input type="text" class="form-control" id="tituloEdicion" placeholder="Titulo del producto">
+                            </div>
+                            <div>
+                                <label for="slug" class="form-label fw-semibold">Slug</label>
+                                <input type="text" class="form-control" id="slugEdicion" name="slug" placeholder="Slug del post">
+                            </div>
+                            <div>
+                                <label for="descripcion" class="form-label fw-semibold">Descripción</label>
+                                <input type="text" class="form-control" id="descripcionEdicion" placeholder="Descripción del post">
+                            </div>
+                            <div>
+                                <label for="contenido" class="form-label fw-semibold">Contenudo</label>
+                                <input type="text" class="form-control" id="contenidoEdicion" placeholder="Contenido del post">
+                            </div>
+                            <div>
+                                <label for="imagen" class="form-label fw-semibold">Imagen</label>
+                                <input type="file" name="imagen" class="form-control" id="imagenEdicion" placeholder="Imagen del post">
+                            </div>
+                            <div>
+                                <label for="publicados" class="form-label fw-semibold">¿Publicado?</label>
+                                <select id="publicadosEdicion" name="publicados" class="form-control">
+                                    <option value="">--- Selecciona una Estado ---</option>
+                                    <option value="si">Si</option>
+                                    <option value="no">No</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="categorias" class="form-label fw-semibold">Categoria</label>
+                                <select id="categoriasSelectEdicion" name="categorias" class="form-control">
+                                    <option value="">--- Selecciona una Categoria ---</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer d-flex justify-content-between">
+                        <button type="button" id="sendForm" class="btn btn-success fw-semibold">Actualizar</button>
                         <button type="button" class="btn btn-outline-danger fw-semibold" data-bs-dismiss="modal">Cerrar</button>
                     </div>
                 </div>

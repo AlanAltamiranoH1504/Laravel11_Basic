@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     listarPostsPeticion();
-    listarCategoriasPeticion();
+    listarCategoriasPeticion("creacion");
 
     //Selectores
     const btnSendForm = document.querySelector("#sendForm");
@@ -9,11 +9,6 @@ document.addEventListener("DOMContentLoaded", () => {
     btnSendForm.addEventListener("click", guardarPostPeticion);
 
     //Funciones
-    function predeterminadas() {
-        listadoPostRenderizado();
-        listarCategoriasPeticion();
-    }
-
     function listarPostsPeticion() {
         fetch("/listPosts", {
             method: "GET"
@@ -27,13 +22,13 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    function listarCategoriasPeticion() {
+    function listarCategoriasPeticion(lugar) {
         fetch("/listCategorias", {
             method: "GET"
         }).then((response) => {
             return response.json();
         }).then((data) => {
-            llenadoSelectCategorias(data);
+            llenadoSelectCategorias(data, lugar);
         }).catch((error) => {
             console.log("Error en peticion al backend");
             console.log(error.message);
@@ -71,19 +66,34 @@ document.addEventListener("DOMContentLoaded", () => {
             const accionBtnSeleccionado = e.target.getAttribute("id");
             if (accionBtnSeleccionado === "btnEliminar") {
                 eliminiarPostPeticion(e.target.getAttribute("data-id"));
+            } else {
+                editarPostPeticion(e.target.getAttribute("data-id"));
             }
         })
     }
 
-    function llenadoSelectCategorias(categorias) {
-        const categoriasSelect = document.querySelector("#categoriasSelect");
-        categoriasSelect.innerHTML = "";
-        categorias.forEach((categoria) => {
-           const optionCategoria = document.createElement("option");
-           optionCategoria.setAttribute("value", categoria.id);
-           optionCategoria.innerHTML =  categoria.nombre;
-           categoriasSelect.appendChild(optionCategoria);
-        });
+    function llenadoSelectCategorias(categorias, lugar) {
+        if (lugar === "creacion") {
+            const categoriasSelect = document.querySelector("#categoriasSelect");
+            categoriasSelect.innerHTML = "";
+            categorias.forEach((categoria) => {
+                const optionCategoria = document.createElement("option");
+                optionCategoria.setAttribute("value", categoria.id);
+                optionCategoria.innerHTML =  categoria.nombre;
+                categoriasSelect.appendChild(optionCategoria);
+            });
+        } else {
+            const categoriasSelectEdicion = document.querySelector("#categoriasSelectEdicion");
+            categoriasSelectEdicion.innerHTML = "";
+            categorias.forEach((categoria) => {
+                const optionCategoria = document.createElement("option");
+                optionCategoria.setAttribute("value", categoria.id);
+                optionCategoria.innerHTML =  categoria.nombre;
+                categoriasSelectEdicion.appendChild(optionCategoria);
+            });
+        }
+
+
     }
 
     function guardarPostPeticion(e) {
@@ -131,28 +141,69 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function eliminiarPostPeticion(id){
+        if (confirm("¿Estás seguro que quieres eliminar el post?")) {
+            const bodyPost = {
+                id
+            };
+            const csrfToken = document.querySelector("#_token").value;
+
+            fetch(`/posts/${id}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                    "X-CSRF-TOKEN": csrfToken
+                },
+                body: JSON.stringify(bodyPost)
+            }).then((response) => {
+                return response.json();
+            }).then((data) => {
+                alertas("delete", "sucess", data.message, null);
+                listarPostsPeticion();
+            }).catch((error) => {
+                console.log("Error en peticion para eliminacion");
+                console.log(error.message);
+            });
+        }
+    }
+
+    function editarPostPeticion(id) {
         const bodyPost = {
             id
         };
-        const csrfToken = document.querySelector("#_token").value;
+        const token = document.querySelector("#_token").value;
 
         fetch(`/posts/${id}`, {
-            method: "DELETE",
+            method: "GET",
             headers: {
-                "Content-Type": "application/json",
                 "Accept": "application/json",
-                "X-CSRF-TOKEN": csrfToken
-            },
-            body: JSON.stringify(bodyPost)
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": token
+            }
         }).then((response) => {
             return response.json();
         }).then((data) => {
-            alertas("delete", "sucess", data.message, null);
-            listarPostsPeticion();
+            if (!data.post) {
+                console.log("Muestra alertas de post no encontrado");
+            }else{
+                listarCategoriasPeticion("edicion");
+                llenarFormularioActualizacion(data.post);
+            }
         }).catch((error) => {
-            console.log("Error en peticion para eliminacion");
+            console.log("Error en peticion");
             console.log(error.message);
-        });
+        })
+    }
+
+    function llenarFormularioActualizacion(post){
+        const modalEdicion = new bootstrap.Modal(document.querySelector("#editarPost"));
+        modalEdicion.show();
+
+        document.querySelector("#tituloEdicion").value = post.titulo;
+        document.querySelector("#slugEdicion").value = post.slug;
+        document.querySelector("#descripcionEdicion").value = post.descripcion;
+        document.querySelector("#contenidoEdicion").value = post.contenido;
+        document.querySelector("#publicadosEdicion").value = post.publicado;
     }
 
     function alertas(lugar, tipo, msg, errores) {
