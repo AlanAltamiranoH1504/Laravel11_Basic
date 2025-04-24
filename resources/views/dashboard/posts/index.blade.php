@@ -15,6 +15,7 @@
                         <i class="bi bi-plus-circle me-2"></i>Agregar Categoria
                     </button>
                 </div>
+                <input type="hidden" id="tokePrueba" value="{{csrf_token()}}">
 
                 <div class="table-responsive">
                     <table class="table table-hover shadow-sm mt-4 rounded overflow-hidden text-center align-middle">
@@ -46,7 +47,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="w-100 mt-2" id="alertas"></div>
+                        <div class="w-100 mt-2" id="alertasCreacion"></div>
                         <form class="d-flex flex-column gap-3" enctype="multipart/form-data">
                             <input type="hidden" id="_token" value="{{csrf_token()}}">
                             <div>

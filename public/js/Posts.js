@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //Selectores
     const btnSendForm = document.querySelector("#sendForm");
+
     //Eventos
     btnSendForm.addEventListener("click", guardarPostPeticion);
 
@@ -16,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }).then((data) => {
             listadoPostRenderizado(data);
         }).catch((error) => {
-            console.log("Error en peticion al backend");
+            console.log("Error en peticion al backend para listado de posts");
             console.log(error.message);
         });
     }
@@ -36,6 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function listadoPostRenderizado(postArray) {
         const bodyPosts = document.querySelector("#bodyPosts");
+        bodyPosts.innerHTML = "";
         postArray.forEach((post) => {
             const trPost = document.createElement("tr");
             trPost.innerHTML = `
@@ -51,8 +53,10 @@ document.addEventListener("DOMContentLoaded", () => {
             bodyPosts.appendChild(trPost);
         })
     }
+
     function llenadoSelectCategorias(categorias) {
         const categoriasSelect = document.querySelector("#categoriasSelect");
+        categoriasSelect.innerHTML = "";
         categorias.forEach((categoria) => {
            const optionCategoria = document.createElement("option");
            optionCategoria.setAttribute("value", categoria.id);
@@ -64,8 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function guardarPostPeticion(e) {
         e.preventDefault();
 
-        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
+        const csrfToken = document.querySelector("#_token").value;
         const inputTitulo = document.querySelector("#titulo").value;
         const inputSlug = document.querySelector("#slug").value;
         const inputDescripcion = document.querySelector("#descripcion").value;
@@ -86,16 +89,50 @@ document.addEventListener("DOMContentLoaded", () => {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "X-CSRF-TOKEN": csrfToken
+                "Accept": "application/json",
+                "X-CSRF-TOKEN": csrfToken,
             },
             body: JSON.stringify(postBody)
         }).then((response) => {
             return response.json();
         }).then((data) => {
-            // console.log(data);
+            if (!data.errors) {
+                alertas("create", "success", "Post creado correctamente!", null);
+                listarPostsPeticion();
+                listarCategoriasPeticion();
+            } else{
+                alertas("create", "error", "Error en creacion de post", data.errors);
+            }
         }).catch((error) => {
             console.log("Error en la peticion al backend");
             console.log(error.message);
         });
+    }
+
+    function alertas(lugar, tipo, msg, errores) {
+        if (lugar === "create") {
+            const divAlertasCreacion = document.querySelector("#alertasCreacion");
+            if (tipo === "error") {
+                const valuesErrores = Object.values(errores);
+                valuesErrores.forEach((error) => {
+                    const msgError = error[0];
+                    const divError = document.createElement("div");
+                    divError.classList.add("bg-danger", "mb-3", "text-white", "fw-semibold", "text-center", "rounded", "px-3", "py-1", "fs-5");
+                    divError.textContent = msgError;
+                    divAlertasCreacion.appendChild(divError);
+                });
+                setTimeout(() => {
+                    divAlertasCreacion.innerHTML = "";
+                }, 3500)
+            } else {
+                const divSucces = document.createElement("div");
+                divSucces.classList.add("bg-success", "mb-3", "text-white", "fw-semibold", "text-center", "rounded", "px-3", "py-1", "fs-5");
+                divSucces.textContent = msg;
+                divAlertasCreacion.appendChild(divSucces);
+                setTimeout(() => {
+                    divAlertasCreacion.innerHTML = "";
+                }, 3500)
+            }
+        }
     }
 });

@@ -28,7 +28,7 @@ class RequestPostCreate extends FormRequest
             "contenido" => ["string"],
             "imagen" => ["string"],
             "publicado" => ["string", "required"],
-            "categora_id" => ["integer", "required"],
+            "categora_id" => ["string", "required|exists: categorias,id"],
         ];
     }
 
@@ -40,11 +40,9 @@ class RequestPostCreate extends FormRequest
             "slug.string" => "El slug debe ser una cadena de texto",
             "descripcion.string" => "La descripcion debe ser una cadena de texto",
             "contenido.string" => "El contenido debe ser una cadena de texto ",
-//            "imagen.string" => "La imagen debe ser una cadena de texto",
             "publicado.required" => "El campo publicado es requerido",
             "publicado.string" => "El campo publicado debe ser una cadena de texto",
             "categoria_id.required" => "El campo categoria es requerido",
-//            "categoria_id.integer" => "El campo categoria debe ser un entero",
         ];
     }
 }
