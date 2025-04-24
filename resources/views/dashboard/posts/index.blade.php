@@ -15,6 +15,7 @@
                         <i class="bi bi-plus-circle me-2"></i>Agregar Categoria
                     </button>
                 </div>
+                <div id="delete" class="mt-4"></div>
                 <input type="hidden" id="tokePrueba" value="{{csrf_token()}}">
 
                 <div class="table-responsive">
@@ -29,6 +30,7 @@
                             <th>Imagen</th>
                             <th>Publicado (Estado)</th>
                             <th>Categoria</th>
+                            <th>Opciones</th>
                         </tr>
                         </thead>
                         <tbody id="bodyPosts">
